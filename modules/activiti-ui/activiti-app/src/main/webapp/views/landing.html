@@ -31,3 +31,18 @@
         </a>
     </div>
 </div>
+<script>
+    var createApp = '';
+    var lang = (navigator.browserLanguage||navigator.language).toLowerCase();
+    switch (lang) {
+        case 'zh-cn':
+            createApp = '添加一个新的应用程序';
+            break;
+        case 'en':
+            createApp = 'Add a new app';
+            break;
+        default:
+            createApp = '添加一个新的应用程序';
+    }
+    $('.fixed').html(createApp);
+</script>

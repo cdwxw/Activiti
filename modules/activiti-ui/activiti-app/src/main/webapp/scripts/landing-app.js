@@ -89,16 +89,17 @@ activitiApp
         .otherwise({
             redirectTo: ACTIVITI.CONFIG.appDefaultRoute || '/'
         });
-    
+
         // Initialize angular-translate
         $translateProvider.useStaticFilesLoader({
             prefix: './i18n/',
             suffix: '.json'
         })
 
-        .registerAvailableLanguageKeys(['en'], {
+        .registerAvailableLanguageKeys(['en', 'zh-CN'], {
             'en_*': 'en',
-            'en-*': 'en'
+            'en-*': 'en',
+            'zh-CN': 'zh-CN'
         });
 
 
@@ -120,11 +121,11 @@ activitiApp
         $rootScope.alerts = {
             queue: []
         };
-        
+
         $rootScope.webRootUrl = function() {
             return ACTIVITI.CONFIG.webContextRoot;
         };
-        
+
         $rootScope.restRootUrl = function() {
             return ACTIVITI.CONFIG.contextRoot;
         };
@@ -177,14 +178,26 @@ activitiApp
      }])
      .run(['$rootScope', '$location', '$window', 'AuthenticationSharedService', '$translate', '$modal',
         function($rootScope, $location, $window, AuthenticationSharedService, $translate, $modal) {
-         
+/*
         var proposedLanguage = $translate.proposedLanguage();
         if (proposedLanguage !== 'de' && proposedLanguage !== 'en' && proposedLanguage !== 'es' && proposedLanguage !== 'fr'
             && proposedLanguage !== 'it' && proposedLanguage !== 'ja') {
-            
+
             $translate.use('en');
         }
-         
+*/
+            var lang = (navigator.browserLanguage||navigator.language).toLowerCase();
+            switch (lang) {
+                case 'zh-cn':
+                    $translate.use('zh-CN');
+                    break;
+                case 'en':
+                    $translate.use('en');
+                    break;
+                default:
+                    $translate.use('zh-CN');
+            }
+
         /* Auto-height */
 
         $rootScope.window = {};
@@ -229,7 +242,7 @@ activitiApp
 
         // Call when the user is authenticated
         $rootScope.$on('event:auth-authConfirmed', function(event, data) {
-        
+
             $rootScope.authenticated = true;
             $rootScope.authenticationChecked = true;
 
@@ -240,7 +253,7 @@ activitiApp
                 var locationPath = $location.path();
                 if (locationPath == '' || locationPath == '#' || locationPath == '/login'
                     || locationPath.indexOf('/account/activate/') >= 0 || locationPath.indexOf('/account/reset-password/') >= 0) {
-                      
+
                     $location.path('/');
                 }
             }
@@ -259,7 +272,7 @@ activitiApp
 
         // Call when login fails
         $rootScope.$on('event:auth-loginFailed', function() {
-            $rootScope.addAlertPromise($translate('LOGIN.MESSAGES.ERROR.AUTHENTICATION'), 'error'); 
+            $rootScope.addAlertPromise($translate('LOGIN.MESSAGES.ERROR.AUTHENTICATION'), 'error');
         });
 
         $rootScope.backToLanding = function() {

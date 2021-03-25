@@ -187,7 +187,7 @@ activitiModeler
                     verify: authRouteResolver
                 }
             });
-            
+
         if (ACTIVITI.CONFIG.appDefaultRoute) {
             $routeProvider.when('/', {
                 redirectTo: ACTIVITI.CONFIG.appDefaultRoute
@@ -213,11 +213,12 @@ activitiModeler
             suffix: '.json'
         });
 
-        $translateProvider.registerAvailableLanguageKeys(['en'], {
+        $translateProvider.registerAvailableLanguageKeys(['en', 'zh-CN'], {
             'en_*': 'en',
-            'en-*': 'en'
+            'en-*': 'en',
+            'zh-CN': 'zh-CN'
         });
-        
+
   }])
   .run(['$rootScope', '$timeout', '$modal', '$translate', '$location', '$window', 'appResourceRoot',
         function($rootScope, $timeout, $modal, $translate, $location, $window, appResourceRoot) {
@@ -388,12 +389,24 @@ activitiModeler
   ])
   .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Account', '$translate', '$window', '$modal',
         function($rootScope, $location, AuthenticationSharedService, Account, $translate, $window , $modal) {
-      
+/*
             var proposedLanguage = $translate.proposedLanguage();
             if (proposedLanguage !== 'de' && proposedLanguage !== 'en' && proposedLanguage !== 'es' && proposedLanguage !== 'fr'
                 && proposedLanguage !== 'it' && proposedLanguage !== 'ja') {
-              
+
                 $translate.use('en');
+            }
+*/
+            var lang = (navigator.browserLanguage||navigator.language).toLowerCase();
+            switch (lang) {
+                case 'zh-cn':
+                    $translate.use('zh-CN');
+                    break;
+                case 'en':
+                    $translate.use('en');
+                    break;
+                default:
+                    $translate.use('zh-CN');
             }
 
             var fixedUrlPart = '/editor/';

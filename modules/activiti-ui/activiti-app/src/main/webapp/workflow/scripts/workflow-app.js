@@ -161,9 +161,10 @@ activitiApp
             suffix: '.json'
         });
 
-       $translateProvider.registerAvailableLanguageKeys(['en'], {
+       $translateProvider.registerAvailableLanguageKeys(['en', 'zh-CN'], {
            'en_*': 'en',
-           'en-*': 'en'
+           'en-*': 'en',
+           'zh-CN': 'zh-CN'
        });
 
        // turn loading bar spinner off (angular-loading-bar lib)
@@ -179,14 +180,26 @@ activitiApp
         $rootScope.config = ACTIVITI.CONFIG;
         $rootScope.appResourceRoot = appResourceRoot;
         $rootScope.activitiFieldIdPrefix = 'activiti-';
-
+/*
         var proposedLanguage = $translate.proposedLanguage();
         if (proposedLanguage !== 'de' && proposedLanguage !== 'en' && proposedLanguage !== 'es' && proposedLanguage !== 'fr'
             && proposedLanguage !== 'it' && proposedLanguage !== 'ja') {
-            
+
             $translate.use('en');
         }
-        
+*/
+            var lang = (navigator.browserLanguage||navigator.language).toLowerCase();
+            switch (lang) {
+                case 'zh-cn':
+                    $translate.use('zh-CN');
+                    break;
+                case 'en':
+                    $translate.use('en');
+                    break;
+                default:
+                    $translate.use('zh-CN');
+            }
+
         $rootScope.window = {};
         var updateWindowSize = function() {
             $rootScope.window.width = $window.innerWidth;
